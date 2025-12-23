@@ -11,13 +11,13 @@ class AuthorCreateSchema(BaseModel):
 class AuthorResponseSchema(AuthorCreateSchema):
     id: int
 
-    model_config = True
+    model_config = {"from_attributes": True}
 
 
 class AuthorListSchema(BaseModel):
     authors: list[AuthorResponseSchema]
 
-    model_config = True
+    model_config = {"from_attributes": True}
 
 
 class BookCreateSchema(BaseModel):
@@ -30,10 +30,10 @@ class BookCreateSchema(BaseModel):
 class BookResponseSchema(BookCreateSchema):
     id: int
 
-    model_config = True
+    model_config = {"from_attributes": True}
 
 
 class BookListSchema(BaseModel):
     books: list[BookResponseSchema]
 
-    model_config = True
+    model_config = {"from_attributes": True}

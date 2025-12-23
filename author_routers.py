@@ -22,7 +22,7 @@ def create_author(
 ):
     if db.query(AuthorModel).where(AuthorModel.name == author_data.name).count() != 0:
         raise HTTPException(
-            status_code=304,
+            status_code=409,
             detail=f"Author with {author_data.name} already exists"
         )
 
@@ -49,7 +49,8 @@ def get_authors(
         limit: int = Query(10, ge=1)
 ):
     authors = db.query(AuthorModel).offset(skip).limit(limit).all()
-    return AuthorListSchema.model_validate(authors)
+    authors = [AuthorResponseSchema.model_validate(author) for author in authors]
+    return AuthorListSchema(authors=authors)
 
 
 @author_router.get(
@@ -62,7 +63,7 @@ def get_author_by_id(
         author_id: int,
         db: Session = Depends(get_session),
 ):
-    author = db.query(AuthorModel).where(AuthorModel.id == author_id)
+    author = db.query(AuthorModel).where(AuthorModel.id == author_id).first()
     if not author:
         raise HTTPException(status_code=404, detail="Author not found")
 

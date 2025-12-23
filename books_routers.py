@@ -50,6 +50,6 @@ def get_books(
 ):
     books = db.query(BookModel).offset(skip).limit(limit)
     if author:
-        books.filter(BookModel.author_id == author)
+        books = books.filter(BookModel.author_id == author)
 
     return BookListSchema.model_validate(books.all())
