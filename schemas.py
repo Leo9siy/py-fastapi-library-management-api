@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, date
 
 from pydantic import BaseModel, Field
 
@@ -23,7 +23,7 @@ class AuthorListSchema(BaseModel):
 class BookCreateSchema(BaseModel):
     title: str
     summary: str
-    publication_date: datetime | None
+    publication_date: date | None
     author_id: int
 
 

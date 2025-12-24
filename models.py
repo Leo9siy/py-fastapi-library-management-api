@@ -1,7 +1,7 @@
-from datetime import datetime
+from datetime import datetime, date
 from typing import Optional
 
-from sqlalchemy import Integer, String, ForeignKey, DateTime
+from sqlalchemy import Integer, String, ForeignKey, DateTime, Date
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
 
@@ -15,8 +15,8 @@ class AuthorModel(base):
     bio: Mapped[str] = mapped_column(String)
 
     books: Mapped[list["BookModel"]] = relationship(
-        argument="Book",
-        back_populates="Books"
+        argument="BookModel",
+        back_populates="author"
     )
 
 class BookModel(base):
@@ -25,11 +25,11 @@ class BookModel(base):
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     title: Mapped[str] = mapped_column(String, nullable=False)
     summary: Mapped[str] = mapped_column(String)
-    publication_date: Mapped[datetime] = mapped_column(DateTime, default=datetime.now)
+    publication_date: Mapped[date] = mapped_column(Date, default=datetime.now)
 
     author_id: Mapped[Optional[int]] = mapped_column(
         ForeignKey("authors.id", ondelete="CASCADE"),
         nullable=True,
     )
 
-    author: Mapped[Optional["AuthorModel"]] = relationship(argument="Author", back_populates="Author")
+    author: Mapped[Optional["AuthorModel"]] = relationship(argument="AuthorModel", back_populates="books")

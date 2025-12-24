@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from fastapi.params import Query
 from sqlalchemy.orm import Session
 
+from crud import add_author, select_authors
 from database import get_session
 from models import AuthorModel
 from schemas import AuthorResponseSchema, AuthorCreateSchema, AuthorListSchema
@@ -20,21 +21,9 @@ def create_author(
         author_data: AuthorCreateSchema,
         db: Session = Depends(get_session)
 ):
-    if db.query(AuthorModel).where(AuthorModel.name == author_data.name).count() != 0:
-        raise HTTPException(
-            status_code=409,
-            detail=f"Author with {author_data.name} already exists"
-        )
-
-    author = AuthorModel(
-        name=author_data.name,
-        bio=author_data.bio
+    return AuthorResponseSchema.model_validate(
+        add_author(db, author_data)
     )
-    db.add(author)
-    db.commit()
-    db.refresh(author)
-
-    return AuthorResponseSchema.model_validate(author)
 
 
 @author_router.get(
@@ -48,9 +37,7 @@ def get_authors(
         skip: int = Query(0, ge=0),
         limit: int = Query(10, ge=1)
 ):
-    authors = db.query(AuthorModel).offset(skip).limit(limit).all()
-    authors = [AuthorResponseSchema.model_validate(author) for author in authors]
-    return AuthorListSchema(authors=authors)
+    return AuthorListSchema(authors=select_authors(db, skip, limit))
 
 
 @author_router.get(

@@ -4,6 +4,7 @@ from fastapi import APIRouter, Depends, Query
 from pydantic import Field
 from sqlalchemy.orm import Session
 
+from crud import add_book, select_books
 from database import get_session
 from models import BookModel
 from schemas import BookCreateSchema, BookResponseSchema, BookListSchema
@@ -22,17 +23,7 @@ def create_book(
         db: Session = Depends(get_session),
 
 ):
-    book = BookModel(
-        title=book_data.title,
-        summary=book_data.summary,
-        author_id=book_data.author_id,
-    )
-
-    db.add(book)
-    db.commit()
-    db.refresh(book)
-
-    return BookResponseSchema.model_validate(book)
+    return BookResponseSchema.model_validate(add_book(db, book_data))
 
 
 @books_router.get(
@@ -48,8 +39,5 @@ def get_books(
         limit: int = Query(10, ge=1),
         db: Session = Depends(get_session),
 ):
-    books = db.query(BookModel).offset(skip).limit(limit)
-    if author:
-        books = books.filter(BookModel.author_id == author)
 
-    return BookListSchema.model_validate(books.all())
+    return BookListSchema(books=select_books(db, skip, limit, author))
