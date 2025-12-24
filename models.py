@@ -24,8 +24,8 @@ class BookModel(base):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     title: Mapped[str] = mapped_column(String, nullable=False)
-    summary: Mapped[str] = mapped_column(String)
-    publication_date: Mapped[date] = mapped_column(Date, default=datetime.now)
+    summary: Mapped[str] = mapped_column(String, nullable=True)
+    publication_date: Mapped[date] = mapped_column(Date, default=datetime.now, nullable=True)
 
     author_id: Mapped[Optional[int]] = mapped_column(
         ForeignKey("authors.id", ondelete="CASCADE"),

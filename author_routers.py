@@ -37,7 +37,9 @@ def get_authors(
         skip: int = Query(0, ge=0),
         limit: int = Query(10, ge=1)
 ):
-    return AuthorListSchema(authors=select_authors(db, skip, limit))
+    authors = select_authors(db, skip, limit)
+    authors = [AuthorResponseSchema.model_validate(author) for author in authors]
+    return AuthorListSchema(authors=authors)
 
 
 @author_router.get(

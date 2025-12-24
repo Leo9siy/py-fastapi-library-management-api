@@ -19,7 +19,7 @@ def add_book(db: Session, book_data: BookCreateSchema):
     return book
 
 
-def select_books(db: Session, limit: int = 10, skip: int = 0, author_id: int = None):
+def select_author_books(db: Session, limit: int = 10, skip: int = 0, author_id: int = None):
     books = db.query(BookModel).offset(skip).limit(limit)
     if author_id:
         books = books.filter(BookModel.author_id == author_id)
@@ -47,5 +47,4 @@ def add_author(db: Session, author_data: AuthorCreateSchema):
 
 def select_authors(db: Session, skip: int = 0, limit: int = 10):
     authors = db.query(AuthorModel).offset(skip).limit(limit).all()
-    authors = [AuthorResponseSchema.model_validate(author) for author in authors]
     return authors

@@ -1,12 +1,8 @@
-from typing import Annotated
-
 from fastapi import APIRouter, Depends, Query
-from pydantic import Field
 from sqlalchemy.orm import Session
 
-from crud import add_book, select_books
+from crud import add_book, select_author_books
 from database import get_session
-from models import BookModel
 from schemas import BookCreateSchema, BookResponseSchema, BookListSchema
 
 books_router = APIRouter()
@@ -40,4 +36,4 @@ def get_books(
         db: Session = Depends(get_session),
 ):
 
-    return BookListSchema(books=select_books(db, skip, limit, author))
+    return BookListSchema(books=select_author_books(db, skip, limit, author))

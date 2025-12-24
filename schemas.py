@@ -22,9 +22,9 @@ class AuthorListSchema(BaseModel):
 
 class BookCreateSchema(BaseModel):
     title: str
-    summary: str
+    summary: str | None
     publication_date: date | None
-    author_id: int
+    author_id: int | None
 
 
 class BookResponseSchema(BookCreateSchema):

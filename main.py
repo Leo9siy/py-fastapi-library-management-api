@@ -10,8 +10,3 @@ app = FastAPI()
 
 app.include_router(author_router)
 app.include_router(books_router)
-
-
-if __name__ == "__main__":
-    base.metadata.drop_all(bind=engine)
-    base.metadata.create_all(bind=engine)
