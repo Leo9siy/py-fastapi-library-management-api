@@ -45,6 +45,17 @@ def add_author(db: Session, author_data: AuthorCreateSchema):
     return author
 
 
+def select_author_by_id(
+        author_id: int,
+        db: Session
+):
+    author = db.query(AuthorModel).where(AuthorModel.id == author_id).first()
+    if not author:
+        raise HTTPException(status_code=404, detail="Author not found")
+
+    return author
+
+
 def select_authors(db: Session, skip: int = 0, limit: int = 10):
     authors = db.query(AuthorModel).offset(skip).limit(limit).all()
     return authors

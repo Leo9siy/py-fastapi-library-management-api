@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from fastapi.params import Query
 from sqlalchemy.orm import Session
 
-from crud import add_author, select_authors
+from crud import add_author, select_authors, select_author_by_id
 from database import get_session
 from models import AuthorModel
 from schemas import AuthorResponseSchema, AuthorCreateSchema, AuthorListSchema
@@ -52,8 +52,4 @@ def get_author_by_id(
         author_id: int,
         db: Session = Depends(get_session),
 ):
-    author = db.query(AuthorModel).where(AuthorModel.id == author_id).first()
-    if not author:
-        raise HTTPException(status_code=404, detail="Author not found")
-
-    return AuthorResponseSchema.model_validate(author)
+    return AuthorResponseSchema.model_validate(select_author_by_id(author_id, db))
