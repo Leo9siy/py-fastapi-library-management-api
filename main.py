@@ -1,10 +1,7 @@
 from fastapi import FastAPI
 
-from books_routers import books_router
-from author_routers import author_router
-from database import engine
-
-from models import base
+from routers.books_routers import books_router
+from routers.author_routers import author_router
 
 app = FastAPI()
 

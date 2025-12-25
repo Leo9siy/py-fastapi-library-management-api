@@ -14,7 +14,7 @@ make_session = sessionmaker(
 )
 
 def get_session():
-    #base.metadata.drop_all(bind=engine)
+    base.metadata.drop_all(bind=engine)
     base.metadata.create_all(bind=engine)
 
     with make_session() as session:

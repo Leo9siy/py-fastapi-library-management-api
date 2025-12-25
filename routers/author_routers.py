@@ -1,12 +1,10 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 from fastapi.params import Query
 from sqlalchemy.orm import Session
 
-from crud import add_author, select_authors, select_author_by_id
-from database import get_session
-from models import AuthorModel
-from schemas import AuthorResponseSchema, AuthorCreateSchema, AuthorListSchema
-
+from crud.author_rep import add_author, select_authors, select_author_by_id
+from database.session import get_session
+from schemas.authors import AuthorResponseSchema, AuthorCreateSchema, AuthorListSchema
 
 author_router = APIRouter()
 
